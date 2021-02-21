@@ -80,7 +80,7 @@ void cleanData() {
 }
 
 bool readValues(long& current, long& total) {
-    http.begin(hostname, 8080,
+    http.begin(hostname, 80,
                "/solar_api/v1/GetInterverRealtimeData.cgi?Scope=System");
     int httpCode = http.GET();  // Send the request
 
