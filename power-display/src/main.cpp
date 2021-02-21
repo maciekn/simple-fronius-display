@@ -7,6 +7,9 @@
 #include <WiFiManager.h>
 #include <Wire.h>
 
+//TODO: configurable host
+//TODO: mdns support
+
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 ESP8266WebServer server(80);
 ESP8266HTTPUpdateServer httpUpdater;
@@ -70,16 +73,23 @@ void setup() {
 
 void loop() {
     long current, total;
-    readValues(current, total);
+    
+    if(readValues(current, total)) {
 
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 0);
-    display.println(total);
+        double formattedTotal = (double)total/1000;
+        double formattedCurrent = (double)current/1000;
+        display.clearDisplay();
+        display.setTextSize(2);
+        display.setCursor(0, 0);
+        display.println(formattedTotal, 2);
 
-    display.setTextSize(5);
-    display.print(current, 2);
-    display.display();
+        display.setTextSize(5);
+        display.print(formattedCurrent, 2);
 
-    delay(200);
+        display.display();
+    } else {
+        // if something goes wrong - just don't refresh
+    }
+
+    delay(1000);
 }
