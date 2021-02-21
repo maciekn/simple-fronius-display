@@ -71,19 +71,30 @@ void setup() {
     server.begin();
 }
 
+void displayTotalAligned(double total) {
+        display.setCursor(0, 0);
+
+        char buf[10];
+        dtostrf(total, 2, 2, buf);
+        int length = strlen(buf);
+
+        display.setCursor(128-12*length, 0);
+
+        display.println(buf);
+}
+
 void loop() {
     long current, total;
     
     if(readValues(current, total)) {
 
-        double formattedTotal = (double)total/1000;
-        double formattedCurrent = (double)current/1000;
+
         display.clearDisplay();
         display.setTextSize(2);
-        display.setCursor(0, 0);
-        display.println(formattedTotal, 2);
+        displayTotalAligned((double)total/1000);
 
         display.setTextSize(5);
+        double formattedCurrent = (double)current/1000;
         display.print(formattedCurrent, 2);
 
         display.display();
