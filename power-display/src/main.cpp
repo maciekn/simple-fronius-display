@@ -4,11 +4,11 @@
 #include <ArduinoJson.h>
 #include <ESP8266HTTPClient.h>
 #include <ESP8266HTTPUpdateServer.h>
+#include <ESP8266mDNS.h>
 #include <WiFiManager.h>
 #include <Wire.h>
 
 //TODO: configurable host
-//TODO: mdns support
 
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 ESP8266WebServer server(80);
@@ -66,6 +66,8 @@ void setup() {
     display.println("Wifi initialized...");
     display.display();
 
+    MDNS.begin("fronius-disp");
+
     httpUpdater.setup(&server);
 
     server.begin();
@@ -87,8 +89,6 @@ void loop() {
     long current, total;
     
     if(readValues(current, total)) {
-
-
         display.clearDisplay();
         display.setTextSize(2);
         displayTotalAligned((double)total/1000);
